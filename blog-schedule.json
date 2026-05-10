@@ -1,0 +1,14 @@
+[
+  { "week": 1, "status": "done", "title": "How I Connected Claude Code to WhatsApp", "file": "claude-code-whatsapp-relay.html" },
+  { "week": 2, "status": "next", "title": "Why I Open-Sourced My SaaS", "angle": "The economics — subs + portfolio beats VC fantasy" },
+  { "week": 3, "status": "queued", "title": "Claude Design to Google Slides — Deep Dive", "angle": "The watermark gate, concurrency limiter, Google OAuth gotchas" },
+  { "week": 4, "status": "queued", "title": "Running Production Puppeteer on a Budget VPS", "angle": "Memory limits, crash recovery, one-at-a-time queuing" },
+  { "week": 5, "status": "queued", "title": "Function Calling Changed How I Build", "angle": "Claude doesn't just chat — it runs shell commands, searches the web" },
+  { "week": 6, "status": "queued", "title": "Persistent Memory for AI Agents", "angle": "How I built a brain for Claude that survives restarts" },
+  { "week": 7, "status": "queued", "title": "The 4-VPS Architecture That Runs My Business", "angle": "$22/month total — what's on each, how they talk" },
+  { "week": 8, "status": "queued", "title": "Building nara-agent: A Personal AI Assistant", "angle": "Gemini + Baileys + Express on one VPS" },
+  { "week": 9, "status": "queued", "title": "What 3 Paying Users Taught Me About SaaS", "angle": "Real feedback, real pivots" },
+  { "week": 10, "status": "queued", "title": "Lemon Squeezy vs Stripe vs Midtrans", "angle": "Payment providers for Indonesian indie hackers" },
+  { "week": 11, "status": "queued", "title": "Automating an AI News Site from Scratch", "angle": "RSS scraping, Google Trends, DeepSeek rewriting" },
+  { "week": 12, "status": "queued", "title": "The AI Indie Hacker Manifesto", "angle": "Build small, charge early, stay open source" }
+]
