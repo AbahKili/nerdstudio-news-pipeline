@@ -396,6 +396,13 @@ function scoreArticle(item, trends) {
 // ── Main ──
 
 (async () => {
+  // Idempotency check — don't publish twice for the same date
+  const pageDir = path.join(NEWS_DIR, today);
+  if (fs.existsSync(pageDir)) {
+    console.log(`[news] Post for ${today} already exists. Skipping.`);
+    process.exit(0);
+  }
+
   console.log(`[news] Starting daily fetch for ${today}`);
 
   // 0. Get trending AI topics from Google Trends
@@ -436,7 +443,6 @@ function scoreArticle(item, trends) {
 
   // 3. Publish
   if (briefing && briefing.stories?.length > 0) {
-    const pageDir = path.join(NEWS_DIR, today);
     fs.mkdirSync(pageDir, { recursive: true });
 
     const html = buildHTML(briefing);

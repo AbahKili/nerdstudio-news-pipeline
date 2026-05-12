@@ -22,6 +22,14 @@ async function searchRepos(query, limit) {
 }
 
 async function main() {
+  // Idempotency check
+  const slug = `github-ai-digest-${today}`;
+  const outputPath = path.join(BLOG_DIR, `${slug}.html`);
+  if (fs.existsSync(outputPath)) {
+    console.log(`[digest] Post for ${today} already exists. Skipping.`);
+    process.exit(0);
+  }
+
   console.log(`[digest] Starting GitHub AI digest for ${today}`);
 
   // 1. Search multiple categories
@@ -120,7 +128,6 @@ Return ONLY valid JSON, no markdown:
       <p>${r.blurb}</p>
     </article>`).join('\n');
 
-  const slug = `github-ai-digest-${today}`;
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
