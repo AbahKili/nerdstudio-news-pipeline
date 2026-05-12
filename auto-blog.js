@@ -10,7 +10,9 @@ const { execSync } = require('child_process');
 const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || '';
 const BLOG_DIR = '/var/www/nerdstudio.online/blog';
 const SCHEDULE_FILE = '/opt/nerdstudio-news/blog-schedule.json';
-const today = new Date().toISOString().slice(0, 10);
+const now = new Date();
+const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+const today = wib.toISOString().slice(0, 10);
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

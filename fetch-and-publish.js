@@ -10,7 +10,10 @@ const crypto = require('crypto');
 
 const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || '';
 const NEWS_DIR = path.join('/var/www/nerdstudio.online', 'news');
-const today = new Date().toISOString().slice(0, 10);
+// WIB date (UTC+7) — so cron at 1am UTC = 8am WIB gets the correct day
+const now = new Date();
+const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+const today = wib.toISOString().slice(0, 10);
 
 // RSS feeds to pull from
 const FEEDS = [

@@ -9,7 +9,9 @@ const path = require('path');
 
 const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY || '';
 const BLOG_DIR = path.join('/var/www/nerdstudio.online', 'blog');
-const today = new Date().toISOString().slice(0, 10);
+const now = new Date();
+const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
+const today = wib.toISOString().slice(0, 10);
 
 async function searchRepos(query, limit) {
   try {
