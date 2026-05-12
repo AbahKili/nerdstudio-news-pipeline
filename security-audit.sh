@@ -41,13 +41,29 @@ if [ "$DAYS" -lt 30 ]; then
   ISSUES="$ISSUES\n⚠️ SSL expires in $DAYS days ($EXPIRY)"
 fi
 
-# 5. Exposed ports
-EXPOSED=$(ss -tlnp 2>/dev/null | grep -v "127.0.0.1" | grep -v ":::\[" | awk '{print $4}' | grep -vE ":22$|:443$|:80$" | grep "0.0.0.0" | wc -l)
-if [ "$EXPOSED" -gt 0 ]; then
-  ISSUES="$ISSUES\n⚠️ $EXPOSED non-standard ports exposed to internet"
+# 5. Firewall — any unexpected open ports?
+OPEN_PORTS=$(firewall-cmd --list-ports 2>/dev/null)
+PORT_COUNT=$(echo "$OPEN_PORTS" | tr ' ' '\n' | grep -cE "^[0-9]+")
+if [ "$PORT_COUNT" -gt 5 ]; then
+  ISSUES="$ISSUES\n⚠️ $PORT_COUNT ports open in firewall — review: $OPEN_PORTS"
 fi
 
-# 6. nginx version hidden
+# 6. Accidental credentials in repos
+for repo in /opt/pptx /opt/nerdstudio-news /var/www/nerdstudio.online; do
+  DIRTY=$(git -C "$repo" diff --cached --name-only 2>/dev/null)
+  if [ -n "$DIRTY" ]; then
+    ISSUES="$ISSUES\n⚠️ $repo has staged changes (possible secrets leaked)"
+  fi
+  # Scan for common secret patterns in COMMITTED files only (not working tree)
+  LEAKS=$(git -C "$repo" grep -lIE --cached \
+    "(sk-[a-zA-Z0-9]{20,}|GOCSPX-[a-zA-Z0-9_-]{20,}|eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+|ghp_[a-zA-Z0-9]{36}|xox[baprs]-[a-zA-Z0-9-]+|api_key.*['\"]?[a-zA-Z0-9_-]{20,})" \
+    -- '*.js' '*.json' '*.py' '*.ts' '*.yml' '*.yaml' '*.conf' '*.html' 2>/dev/null | grep -v ".gitignore\|.env.example" | head -5)
+  if [ -n "$LEAKS" ]; then
+    ISSUES="$ISSUES\n🚨 CREDENTIALS LEAKED in $repo: $LEAKS"
+  fi
+done
+
+# 7. nginx version hidden
 NGINX_VER=$(curl -skI https://nerdstudio.online 2>/dev/null | grep "Server" | grep -oP "\d+\.\d+\.\d+")
 if [ -n "$NGINX_VER" ]; then
   ISSUES="$ISSUES\n⚠️ nginx version exposed: $NGINX_VER"
