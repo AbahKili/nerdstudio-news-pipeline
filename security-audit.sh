@@ -1,7 +1,7 @@
 #!/bin/bash
 # Weekly security audit for nerdstudio.online — runs every Monday 10am WIB
 
-DOMAINS="nerdstudio.online pptx.nerdstudio.online chat.nerdstudio.online"
+DOMAINS="nerdstudio.online pptx.nerdstudio.online chat.nerdstudio.online skip.my.id"
 SENSITIVE="/.git/HEAD /.env /.htaccess /wp-admin"
 ISSUES=""
 
@@ -49,7 +49,7 @@ if [ "$PORT_COUNT" -gt 5 ]; then
 fi
 
 # 6. Accidental credentials in repos
-for repo in /opt/pptx /opt/nerdstudio-news /var/www/nerdstudio.online; do
+for repo in /opt/pptx /opt/nerdstudio-news /var/www/nerdstudio.online /opt/shortener; do
   DIRTY=$(git -C "$repo" diff --cached --name-only 2>/dev/null)
   if [ -n "$DIRTY" ]; then
     ISSUES="$ISSUES\n⚠️ $repo has staged changes (possible secrets leaked)"
